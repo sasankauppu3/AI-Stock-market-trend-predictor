@@ -11,6 +11,7 @@ from sklearn import preprocessing
 from yahoo_finance import Share
 from pprint import pprint
 import os
+import talib
 import warnings
 warnings.filterwarnings("ignore")
     
@@ -71,8 +72,8 @@ def predict(data):
  
     ##adding extra features from talib adjust the hidden layers in Mlp in case of less accuracy
     ## uncomment the below code to aactivate the features
-    '''
-    import talib
+   
+    
     F_ADX=talib.ADX(numpy.asarray(data[:,1]),numpy.asarray(data[:,2]), numpy.asarray(data[:,5])  
     F_ADX = preprocessing.normalize(F_ADX, norm='l2')
     features.append(F_ADX)
@@ -84,7 +85,7 @@ def predict(data):
     F_RSI=talib.RSI(np.asarray(data[:,5]))
     F_RSI = preprocessing.normalize(F_RSI, norm='l2')
     features.append(F_RSI)
-    '''        
+           
     ##500 for CSV's which is approx 25%data for testing###
     train_features = features[500:]
     test_features = features[:500]
@@ -116,7 +117,7 @@ def predict(data):
     #OtherScores = precision_recall_fscore_support(test_labels, predicted)
     #print "RBF Accuracy: ",best_acc," for C=",max_c,"and G=",max_g          
 
-    '''
+   
     step = numpy.arange(0, len(test_labels))
     plt.subplot(211)
     plt.xlim(-1, len(test_labels) + 1)
@@ -130,7 +131,7 @@ def predict(data):
     plt.ylabel('Predicted Values')
     plt.plot(step, best_predicted, drawstyle = 'step')
     plt.show()
-    '''    
+       
 
     ########################### Decision Trees #############################
     clf = tree.DecisionTreeClassifier(min_samples_split=80,min_impurity_split=1e-5)
@@ -140,7 +141,7 @@ def predict(data):
     Accuracy = accuracy_score(test_labels, predicted)
     #print "Decision tree Accuracy: ", Accuracy
     Accuracy_scores.append(Accuracy)
-    '''
+    
     step = numpy.arange(0, len(test_labels))
     plt.subplot(211)
     plt.xlim(-1, len(test_labels) + 1)
@@ -154,7 +155,7 @@ def predict(data):
     plt.ylabel('Predicted Values')
     plt.plot(step, best_predicted, drawstyle = 'step')
     plt.show()
-    '''
+    
     ################################ Neural Net ################################# 
     clf = MLPClassifier(solver='lbfgs', activation='relu',alpha=1e-5,hidden_layer_sizes=(3,2,7),max_iter=200,random_state=1)
     clf.fit(train_features, train_labels)
@@ -163,7 +164,7 @@ def predict(data):
     Accuracy = accuracy_score(test_labels, predicted)
     #print "MLP Accuracy: ", Accuracy
     Accuracy_scores.append(Accuracy)
-    '''
+    
     step = numpy.arange(0, len(test_labels))
     plt.subplot(211)
     plt.xlim(-1, len(test_labels) + 1)
@@ -177,7 +178,7 @@ def predict(data):
     plt.ylabel('Predicted Values')
     plt.plot(step, predicted, drawstyle = 'step')
     plt.show()
-    '''
+    
 
     ################################ Logistic Regression ################################# 
     max_acc=0
@@ -197,7 +198,7 @@ def predict(data):
     #print "Logistic Regression Accuracy: ",best_accuracy," for C=",max_c          
     Accuracy_scores.append(best_accuracy)
 
-    '''
+  
     step = numpy.arange(0, len(test_labels))
     plt.subplot(211)
     plt.xlim(-1, len(test_labels) + 1)
@@ -211,7 +212,7 @@ def predict(data):
     plt.ylabel('Predicted Values')
     plt.plot(step, best_predicted, drawstyle = 'step')
     plt.show()
-    '''
+   
     return Accuracy_scores
 
 
@@ -247,7 +248,7 @@ Net_Accuracy=numpy.mean(Net_Accuracy, axis = 0)
 for i in range(0,4):
     print algos[i],Net_Accuracy[i]
 
-'''
+
 ################### USE IT FOR USING LIVE DATA #####################
 stocks = [Share('Googl'),Share('Aapl'),Share('Msft'),Share('AMZN')]
 Net_Accuracy=list()
@@ -270,4 +271,4 @@ Net_Accuracy=numpy.mean(Net_Accuracy, axis = 0)
 for i in range(0,4):
     print algos[i],Net_Accuracy[i]
 
-'''
+
